@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:one/user/Udetails.dart';
+import 'package:one/user/Uhistory.dart';
+import 'package:one/user/Uhome.dart';
+import 'package:one/user/Utype.dart';
+
+class Utrip extends StatefulWidget {
+  const Utrip({Key? key}) : super(key: key);
+
+  @override
+  State<Utrip> createState() => _UtripState();
+}
+
+class _UtripState extends State<Utrip> {
+  List imagesList = [
+    "images/city1.jpg",
+    "images/city2.jpg",
+
+  ];
+  List titles = [
+    "Package1",
+    "package2",
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(title: Text('My Trips'),
+          backgroundColor:Color(0xff00ADB5),
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Uhome())),
+
+              icon: Icon(Icons.arrow_back)),
+        ),
+        body: ListView.builder(
+            itemCount: imagesList.length,
+            itemBuilder: (context,index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1.0,horizontal: 4.0),
+                child: Card(
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const Uhistory()));
+                    },
+                    title: Text(titles[index]),
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage(imagesList[index]),
+                    ),
+
+                  ),
+                ),
+              );
+            }
+        ),
+
+      ),
+    );
+  }
+}
