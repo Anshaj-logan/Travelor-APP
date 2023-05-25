@@ -8,30 +8,32 @@ import 'package:one/user/Udate.dart';
 import 'package:one/user/Usubmit.dart';
 
 import '../api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Uhome.dart';
 
 class Uothers extends StatefulWidget {
-  const Uothers({Key? key}) : super(key: key);
+  late String fromloc;
+  late String whereloc;
+  late String startdate;
+  late String enddate;
+  Uothers(this.fromloc, this.whereloc, this.startdate, this.enddate);
 
   @override
   State<Uothers> createState() => _UothersState();
 }
 
 class _UothersState extends State<Uothers> {
-  /*List items = [
-
-    "Solo",
-    "Family",
-    "Friends",
-    "Industrial visit",
-    "Honeymoon",
-    "Weekend"
-  ];*/
+  late SharedPreferences localStorage;
   List traveltype = [];
+  List selectagents = [];
   String? selectId;
+  String? selectId1;
   bool _isloading = false;
   TextEditingController personsController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
   TextEditingController requirementsController = TextEditingController();
+  TextEditingController activityController = TextEditingController();
 
   Future getcategories() async {
     var res = await Api().getData('/api/category/view_agent_category');
@@ -43,32 +45,61 @@ class _UothersState extends State<Uothers> {
     });
   }
 
+  Future getallagents() async {
+    var res = await Api().getData('/api/agent/view_agents');
+    var body = json.decode(res.body);
+    print(res);
+    setState(() {
+      print(body);
+      selectagents = body['data'];
+    });
+  }
+
   @override
   void initState() {
     // TODO: iplement initState
     super.initState();
     getcategories();
+    getallagents();
   }
 
   final _formKey = GlobalKey<FormState>();
   void UserSelect() async {
+    localStorage = await SharedPreferences.getInstance();
+    String Login_id = (localStorage.getString('loginId') ?? '');
+    print('login id ${Login_id}');
+    String fromloc = "${widget.fromloc}";
+    print('fromloc ${fromloc}');
+    String whereloc = "${widget.whereloc}";
+    print('whereloc ${whereloc}');
+    String startdate = "${widget.startdate}";
+    print('start Date ${startdate}');
+    String enddate = "${widget.enddate}";
+    print('end Date ${enddate}');
     setState(() {
       _isloading = true;
     });
     var data = {
+      "login_id": Login_id.replaceAll('"', ''),
+      "fromlocation": fromloc,
+      "wherelocation": whereloc,
+      "startdate": startdate,
+      "enddate": enddate,
       "persons": personsController.text,
       "budget": budgetController.text,
-      "requirements": requirementsController.text,
-      "categoryname": selectId,
+      "requirement": requirementsController.text,
+      "traveltype": selectedValue1,
+      "activity": activityController.text,
+      "agent": selectedValue2,
     };
-    var res = await Api().authData(data, '/api/userplan/user-select');
+    var res = await Api().authData(data, '/api/userplan/addplan');
     var body = json.decode(res.body);
     print(body);
     if (body["success"] == true) {
       Fluttertoast.showToast(
           msg: body["message"].toString(), backgroundColor: Colors.grey);
       print('res${res}');
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Ahome()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Uhome()));
     } else {
       Fluttertoast.showToast(
           msg: body["message"].toString(), backgroundColor: Colors.grey);
@@ -121,9 +152,9 @@ class _UothersState extends State<Uothers> {
                 TextField(
                     controller: personsController,
                     decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter Number of Persons',
-                )),
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter Number of Persons',
+                    )),
                 SizedBox(
                   height: 10,
                 ),
@@ -138,9 +169,8 @@ class _UothersState extends State<Uothers> {
                 TextField(
                     controller: budgetController,
                     decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter Budget'
-                )),
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter Budget')),
                 SizedBox(
                   height: 10,
                 ),
@@ -183,56 +213,64 @@ class _UothersState extends State<Uothers> {
                   "Activities",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text("Waterfall"),
-                    activeColor: Colors.blue,
-                    value: isChecked1,
-                    onChanged: (val) {
-                      setState(() {
-                        isChecked1 = val;
-                      });
-                    }),
-                CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text("Temple"),
-                    activeColor: Colors.blue,
-                    value: isChecked2,
-                    onChanged: (val) {
-                      setState(() {
-                        isChecked2 = val;
-                      });
-                    }),
-                CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text("Hilly Region"),
-                    activeColor: Colors.blue,
-                    value: isChecked3,
-                    onChanged: (val) {
-                      setState(() {
-                        isChecked3 = val;
-                      });
-                    }),
-                CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text("Amusement Parks"),
-                    activeColor: Colors.blue,
-                    value: isChecked4,
-                    onChanged: (val) {
-                      setState(() {
-                        isChecked4 = val;
-                      });
-                    }),
-                CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text("Historic Places"),
-                    activeColor: Colors.blue,
-                    value: isChecked5,
-                    onChanged: (val) {
-                      setState(() {
-                        isChecked5 = val;
-                      });
-                    }),
+                TextField(
+                    controller: activityController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter Activities')),
+
+                // CheckboxListTile(
+                //     controlAffinity: ListTileControlAffinity.leading,
+                //     title: Text("Waterfall"),
+                //     activeColor: Colors.blue,
+                //     value: isChecked1,
+                //     onChanged: (val) {
+                //       setState(() {
+                //         isChecked1 = val;
+                //       });
+                //     }),
+                // CheckboxListTile(
+                //     controlAffinity: ListTileControlAffinity.leading,
+                //     title: Text("Temple"),
+                //     activeColor: Colors.blue,
+                //     value: isChecked2,
+                //     onChanged: (val) {
+                //       setState(() {
+                //         isChecked2 = val;
+                //       });
+                //     }),
+                // CheckboxListTile(
+                //     controlAffinity: ListTileControlAffinity.leading,
+                //     title: Text("Hilly Region"),
+                //     activeColor: Colors.blue,
+                //     value: isChecked3,
+                //     onChanged: (val) {
+                //       setState(() {
+                //         isChecked3 = val;
+                //       });
+                //     }),
+                // CheckboxListTile(
+                //     controlAffinity: ListTileControlAffinity.leading,
+                //     title: Text("Amusement Parks"),
+                //     activeColor: Colors.blue,
+                //     value: isChecked4,
+                //     onChanged: (val) {
+                //       setState(() {
+                //         isChecked4 = val;
+                //       });
+                //     }),
+                // CheckboxListTile(
+                //     controlAffinity: ListTileControlAffinity.leading,
+                //     title: Text("Historic Places"),
+                //     activeColor: Colors.blue,
+                //     value: isChecked5,
+                //     onChanged: (val) {
+                //       setState(() {
+                //         isChecked5 = val;
+                //       });
+                //     }),
                 SizedBox(
                   height: 10,
                 ),
@@ -245,6 +283,7 @@ class _UothersState extends State<Uothers> {
                   height: 10,
                 ),
                 TextField(
+                  controller: requirementsController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Add Requirements',
@@ -258,9 +297,34 @@ class _UothersState extends State<Uothers> {
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
+
                 SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
+                DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    hint: Text('select agent'),
+                    style: TextStyle(color: Colors.black),
+                    value: selectedValue2,
+                    items: selectagents
+                        .map((type) => DropdownMenuItem<String>(
+                              value: type['_id'].toString(),
+                              child: Text(
+                                type['name'].toString(),
+                                style: TextStyle(color: Colors.black26),
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (type) {
+                      setState(() {
+                        selectedValue2 = type;
+                      });
+                    }),
                 /*DropdownButtonFormField(
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.travel_explore),
@@ -300,10 +364,12 @@ class _UothersState extends State<Uothers> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.cyan),
-                              onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Udate())),
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => Udate()));
+                              },
                               child: Text('Back',
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),

@@ -88,6 +88,27 @@ agentRouter.post('/', async (req, res) => {
         console.log(err);
     }
 })
+agentRouter.get('/view_agents', (req, res) => {
+
+    agent.find()
+        .then(function (data) {
+            if (data == 0) {
+                return res.status(401).json({
+                    success: false,
+                    error: true,
+                    message: "No data found"
+                })
+            }
+
+            else {
+                return res.status(200).json({
+                    success: true,
+                    error: false,
+                    data: data
+                })
+            }
+        })
+})
 
 agentRouter.get('/approve/:id', (req, res) => {
     const id = req.params.id

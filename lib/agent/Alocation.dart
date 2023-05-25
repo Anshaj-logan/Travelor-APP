@@ -27,23 +27,20 @@ class _AlocationState extends State<Alocation> {
     });
     var data = {
       "location": locationController.text,
-
     };
-    var res = await Api().authData(data, '/api/userplan//userplan_location');
+    var res = await Api().authData(data, '/api/userplan/location');
     var body = json.decode(res.body);
     print(body);
     if (body["success"] == true) {
       Fluttertoast.showToast(
           msg: body["message"].toString(), backgroundColor: Colors.grey);
       print('res${res}');
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Ahome()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Ahome()));
     } else {
       Fluttertoast.showToast(
           msg: body["message"].toString(), backgroundColor: Colors.grey);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

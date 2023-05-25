@@ -17,13 +17,15 @@ class Uplan extends StatefulWidget {
 }
 
 class _UplanState extends State<Uplan> {
-
   List location = [];
-  String? selectId;
   String? selectId1;
+  String? selectId2;
+
+  late String fromloc;
+  late String whereloc;
 
   Future getAllId() async {
-    var res = await Api().getData('/api/userplan/view_userplan_location');
+    var res = await Api().getData('/api/userplan/viewlocation');
     var body = json.decode(res.body);
     print(res);
     setState(() {
@@ -38,6 +40,7 @@ class _UplanState extends State<Uplan> {
     super.initState();
     getAllId();
   }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -70,73 +73,69 @@ class _UplanState extends State<Uplan> {
                     child: Column(children: [
                       Text(
                         "From",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       DropdownButtonFormField<String>(
-
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.location_on),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30)),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 2.0, style: BorderStyle.solid),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 2),
-                            ),
+                                borderRadius: BorderRadius.circular(30)),
                           ),
-                          hint: Text('From location'),
-                          value: selectId,
+                          hint: Text('Location'),
+                          style: TextStyle(color: Colors.black),
+                          value: selectId1,
                           items: location
                               .map((type) => DropdownMenuItem<String>(
-
-                                    value: type['_id'].toString(),
-                                    child: Text(type['location'].toString()),
+                                    value: type['location'].toString(),
+                                    child: Text(
+                                      type['location'].toString(),
+                                      style: TextStyle(color: Colors.black26),
+                                    ),
                                   ))
                               .toList(),
                           onChanged: (type) {
                             setState(() {
-                              selectId=type;
+                              selectId1 = type;
                             });
                           }),
                       SizedBox(height: 20),
                       Text(
                         "To",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      DropdownButtonFormField(
+                      DropdownButtonFormField<String>(
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.location_on),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30)),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 2.0, style: BorderStyle.solid),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1),
-                            ),
+                                borderRadius: BorderRadius.circular(30)),
                           ),
-                          hint: Text('Where you want to go?'),
-                          value: selectId1,
+                          hint: Text('Location'),
+                          style: TextStyle(color: Colors.black),
+                          value: selectId2,
                           items: location
                               .map((type) => DropdownMenuItem<String>(
-                            value: type['_id'].toString(),
-                            child: Text(type['location'].toString()),
+                                    value: type['location'].toString(),
+                                    child: Text(
+                                      type['location'].toString(),
+                                      style: TextStyle(color: Colors.black26),
+                                    ),
                                   ))
                               .toList(),
                           onChanged: (type) {
                             setState(() {
-                              selectId1=type;
+                              selectId2 = type;
                             });
                           }),
                       Padding(
@@ -168,25 +167,29 @@ class _UplanState extends State<Uplan> {
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: TextButton.icon(
-                                  onPressed: ()  =>
-
-                                     Navigator.push(
-                                        context,
-                                      MaterialPageRoute(
-                                            builder: (context) =>
-                                              Udate())),
-
-
-
+                                  onPressed: () {
+                                    fromloc = selectId1!;
+                                    whereloc = selectId2!;
+                                    if (fromloc == whereloc) {
+                                      Fluttertoast.showToast(
+                                          msg: "Select differnt cities",
+                                          backgroundColor: Colors.grey);
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Udate(fromloc, whereloc)));
+                                    }
+                                  },
                                   icon: Icon(
                                     Icons.arrow_forward_ios,
                                     color: Colors.black,
-                                   ),
+                                  ),
                                   label: Text('Next',
                                       style: TextStyle(
                                           fontSize: 15, color: Colors.black)),
                                 ),
-
                               ),
                             ),
                           ],

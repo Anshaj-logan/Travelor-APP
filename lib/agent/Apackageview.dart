@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../api.dart';
+import 'Apackages.dart';
 
 class Apackageview extends StatefulWidget {
   String _id;
@@ -56,7 +57,7 @@ class _ApackageviewState extends State<Apackageview> {
     print('body of datas${body}');
     setState(() {
       package_name = body['data'][0]['package_name'];
-      traveltype = body['data'][0]['traveltype'];
+      traveltype = body['data'][0]['categoryname'];
       cityname = body['data'][0]['cityname'];
       description = body['data'][0]['description'];
       distance = body['data'][0]['distance'];
@@ -111,8 +112,8 @@ class _ApackageviewState extends State<Apackageview> {
         backgroundColor: Colors.grey,
       );
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Adetail(tripid: 'tripid')));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Apackages()));
     } else {
       Fluttertoast.showToast(
         msg: body['message'].toString(),
@@ -142,46 +143,46 @@ class _ApackageviewState extends State<Apackageview> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField(
                       "package_name", package_name, package_nameController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField(
                       "traveltype", traveltype, traveltypeController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField("cityname", cityname, citynameController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField(
                       "description", description, descriptionController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField("distance", distance, distanceController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField("days", days, daysController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField("weather", weather, weatherController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField("budget", budget, budgetController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   buildTextField("activity", activity, activityController),
-                   SizedBox(
+                  SizedBox(
                     height: 40,
                   ),
                   Row(
