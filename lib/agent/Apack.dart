@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:one/agent/Achat.dart';
@@ -5,16 +7,34 @@ import 'package:one/agent/Anew.dart';
 import 'package:one/user/Upackages.dart';
 import 'package:one/user/Ubooking.dart';
 import 'package:one/user/Uchat.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../api.dart';
 //import 'package:one/screens/filter.dart';
 
 class Apack extends StatefulWidget {
-  const Apack({Key? key}) : super(key: key);
+  String U_id;
+  Apack(this.U_id);
 
   @override
   State<Apack> createState() => _ApackState();
 }
 
 class _ApackState extends State<Apack> {
+  late SharedPreferences localStrorage;
+  String packagename = "";
+  String budget = "";
+  String fromloc = "";
+  String whereloc = "";
+  String startdate = "";
+  String enddate = "";
+  String persons = "";
+  String traveltype = "";
+  String activity = "";
+  String requirement = "";
+
+  late String U_id;
+  List _loaduserdata = [];
   TextEditingController textController = TextEditingController();
   String displayText = "";
   final List imagesList = [
@@ -27,6 +47,48 @@ class _ApackState extends State<Apack> {
   ];
   final List titles = ["city1", "city2", "city3", "city4", "city5", "city6"];
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchData();
+    // _fetchDel();
+  }
+
+  _fetchData() async {
+    U_id = widget.U_id;
+
+    var res = await Api().getData(
+        '/api/userplan/view_single-package/' + U_id.replaceAll('"', ''));
+    print(res);
+
+    if (res.statusCode == 200) {
+      var items = json.decode(res.body);
+      print('data${items}');
+
+      setState(() {
+        //  packagename = items['data'][0]['packagename'];
+        budget = items['data']['budget'];
+        fromloc = items['data']['fromlocation'];
+        whereloc = items['data']['wherelocation'];
+        startdate = items['data']['startdate'];
+        enddate = items['data']['enddate'];
+        persons = items['data']['persons'];
+        traveltype = items['data']['traveltype'];
+        activity = items['data']['activity'];
+        requirement = items['data']['requirement'];
+
+        // capacity = body['data'][0]['capacity'];
+        // amount = body['data'][0]['amount'];
+      });
+    }
+    // else {
+    //   setState(() {
+    //     _loaduserdata = [];
+    //   });
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,32 +190,218 @@ class _ApackState extends State<Apack> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: textController,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      'From Location :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      fromloc,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: textController,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      'To Location :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      whereloc,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: textController,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Start date :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      startdate,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'End date :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      enddate,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Persons:',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      persons,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Budget :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      budget,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Travel Type :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      traveltype,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Activity :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      activity,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Requirements :',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //],
+                    //),
+                    Text(
+                      requirement,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:one/agent/Apack.dart';
 import 'package:one/user/Udetails.dart';
 
-
 class Achat extends StatefulWidget {
   const Achat({Key? key}) : super(key: key);
 
@@ -16,11 +15,13 @@ class _AchatState extends State<Achat> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(backgroundColor: Color(0xff00ADB5),
+        appBar: AppBar(
+          backgroundColor: Color(0xff00ADB5),
           title: Text('Package1'),
           leading: IconButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Apack())),
-
+              onPressed: () {
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Apack()));
+              },
               icon: Icon(Icons.arrow_back)),
         ),
         body: Column(
@@ -32,7 +33,8 @@ class _AchatState extends State<Achat> {
                   Container(
                     padding: EdgeInsets.all(8),
                     margin: EdgeInsets.all(8),
-                    child: Text('New message',
+                    child: Text(
+                      'New message',
                       style: TextStyle(
                         fontSize: 23,
                       ),
@@ -44,7 +46,6 @@ class _AchatState extends State<Achat> {
                   ),
                 ],
               ),
-
             ),
             Container(
               height: 60,
@@ -52,9 +53,11 @@ class _AchatState extends State<Achat> {
               child: Row(
                 children: [
                   Expanded(
-                    child:  TextField(),
+                    child: TextField(),
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.send),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.send),
                   ),
                 ],
               ),
