@@ -9,27 +9,32 @@ var ObjectId = require('mongodb').ObjectId;
 
 const userplanRouter = express.Router()
 
-
-userplanRouter.post('/location', async (req, res) => {
+userplanRouter.post('/update-rejected-user-plan/:id', async (req, res) => {
+    const id = req.body.id
     try {
+        userplan.updateOne({ _id: id }, { $set: { agent: req.body.agent_id, status:0 } }).then((data) => {
+            return res.status(200).json({
+                success: true,
+                error: false,
+                message: "Plan request updated"
+            })
+        }).catch((err) => {
+            return res.status(401).json({
+                success: false,
+                error: true,
+                message: "Something went wrong"
+            })
+        })
 
-        const location = req.body.location
-
-
-
-        const locationDetails = await userlocation.create({ location })
-        if (locationDetails) {
-            res.status(201).json({ success: true, error: false, message: "location added", details: locationDetails });
-        }
     } catch (error) {
-        res.status(500).json({ success: false, error: true, message: "something went wrong" });
-        console.log(error);
-    }
-})
 
-userplanRouter.get('/viewlocation', (req, res) => {
-    //const id = req.params.id
-    userlocation.find()
+    }
+}
+)
+
+userplanRouter.get('/view_single_user_plan/:login_id', (req, res) => {
+    const id = req.params.login_id
+    userplan.find({ login_id: id })
         .then(function (data) {
             if (data == 0) {
                 return res.status(401).json({
@@ -49,12 +54,90 @@ userplanRouter.get('/viewlocation', (req, res) => {
         })
 })
 
+userplanRouter.get('/approve-user-plan/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        userplan.updateOne({ _id: id }, { $set: { status: 1 } }).then((data) => {
+            return res.status(200).json({
+                success: true,
+                error: false,
+                message: "Plan approved"
+            })
+        }).catch((err) => {
+            return res.status(401).json({
+                success: false,
+                error: true,
+                message: "Something went wrong"
+            })
+        })
+
+    } catch (error) {
+
+    }
+}
+)
+
+userplanRouter.get('/reject-user-plan/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        userplan.updateOne({ _id: id }, { $set: { status: 2 } }).then((data) => {
+            return res.status(200).json({
+                success: true,
+                error: false,
+                message: "Plan rejected"
+            })
+        }).catch((err) => {
+            return res.status(401).json({
+                success: false,
+                error: true,
+                message: "Something went wrong"
+            })
+        })
+
+    } catch (error) {
+
+    }
+}
+)
+
+userplanRouter.post('/location', async (req, res) => {
+    try {
+        const location = req.body.location
+        const locationDetails = await userlocation.create({ location })
+        if (locationDetails) {
+            res.status(201).json({ success: true, error: false, message: "location added", details: locationDetails });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "something went wrong" });
+        console.log(error);
+    }
+})
+
+userplanRouter.get('/viewlocation', (req, res) => {
+    userlocation.find()
+        .then(function (data) {
+            if (data == 0) {
+                return res.status(401).json({
+                    success: false,
+                    error: true,
+                    message: "No data found"
+                })
+            }
+            else {
+                return res.status(200).json({
+                    success: true,
+                    error: false,
+                    data: data
+                })
+            }
+        })
+})
 
 userplanRouter.post('/addplan', async (req, res) => {
     try {
         const { login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent } = req.body
 
-        const packageDetails = await userplan.create({ login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent })
+        const packageDetails = await userplan.create({ login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent, status: 0 })
         if (packageDetails) {
             res.status(201).json({ success: true, error: false, message: "package added", details: packageDetails });
         }
@@ -86,28 +169,27 @@ userplanRouter.get('/view_user_plan', (req, res) => {
         })
 })
 
-userplanRouter.get('/view_single-package/:id',(req,res) => {
+userplanRouter.get('/view_single-package/:id', (req, res) => {
     const id = req.params.id
-    userplan.findOne({_id:id})
-    .then(function(data) {
-        if(data==0) {
-            return res.status(401).json({
-                success: false,
-                error: true,
-                message:"No data found"
-            })
-        }
+    userplan.findOne({ _id: id })
+        .then(function (data) {
+            if (data == 0) {
+                return res.status(401).json({
+                    success: false,
+                    error: true,
+                    message: "No data found"
+                })
+            }
 
-        else{
-            return res.status(200).json({
-                success:true,
-                error:false,
-                data:data
-            })
-        }
-    })
+            else {
+                return res.status(200).json({
+                    success: true,
+                    error: false,
+                    data: data
+                })
+            }
+        })
 })
-
 
 userplanRouter.get('/view-userplan-single-agent/:id', (req, res) => {
     const id = req.params.id
@@ -120,7 +202,7 @@ userplanRouter.get('/view-userplan-single-agent/:id', (req, res) => {
                 'foreignField': '_id',
                 'as': 'result'
             }
-        }, 
+        },
         {
             '$lookup': {
                 'from': 'registration-tbs',
@@ -136,7 +218,7 @@ userplanRouter.get('/view-userplan-single-agent/:id', (req, res) => {
             "$unwind": "$result"
         },
         {
-            "$match":{
+            "$match": {
                 "agent": new ObjectId(id)
             }
         },
@@ -144,9 +226,9 @@ userplanRouter.get('/view-userplan-single-agent/:id', (req, res) => {
             "$group": {
                 "_id": "$_id",
                 "name": { "$first": "$user.name" },
-               
+
                 "traveltype": { "$first": "$traveltype" },
-              
+
 
             }
         }

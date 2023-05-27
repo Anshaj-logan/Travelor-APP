@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const schema = mongoose.Schema
 const userplanSchema = new schema({
     login_id:{type:mongoose.Types.ObjectId,ref:"login-tb"},
+    agent:{ type: mongoose.Types.ObjectId, ref: "travel_agent-tb"},
     fromlocation:{type:String},
     wherelocation:{type:String},
     startdate:{type:String},
@@ -13,7 +14,8 @@ const userplanSchema = new schema({
     traveltype:{type:String},
     activity:{type:String},
     requirement:{type:String},
-    agent:{ type: mongoose.Types.ObjectId, ref: "travel_agent-tb"}
+    status:{type:String},
+
     
     
     
