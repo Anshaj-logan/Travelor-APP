@@ -34,6 +34,7 @@ class _UothersState extends State<Uothers> {
   TextEditingController budgetController = TextEditingController();
   TextEditingController requirementsController = TextEditingController();
   TextEditingController activityController = TextEditingController();
+  TextEditingController packageController = TextEditingController();
 
   Future getcategories() async {
     var res = await Api().getData('/api/category/view_agent_category');
@@ -91,6 +92,7 @@ class _UothersState extends State<Uothers> {
       "traveltype": selectedValue1,
       "activity": activityController.text,
       "agent": selectedValue2,
+      "package_name": packageController.text,
     };
     var res = await Api().authData(data, '/api/userplan/addplan');
     var body = json.decode(res.body);
@@ -141,6 +143,23 @@ class _UothersState extends State<Uothers> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Add a Name for package',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                    controller: packageController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'package name',
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Number of Persons',
                   textAlign: TextAlign.left,

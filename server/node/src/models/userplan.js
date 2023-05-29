@@ -15,6 +15,7 @@ const userplanSchema = new schema({
     activity:{type:String},
     requirement:{type:String},
     status:{type:String},
+    package_name:{type:String},
 
     
     

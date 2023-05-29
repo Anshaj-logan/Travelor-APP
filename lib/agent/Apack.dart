@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:one/agent/Achat.dart';
 import 'package:one/agent/Anew.dart';
 import 'package:one/user/Upackages.dart';
@@ -10,6 +11,7 @@ import 'package:one/user/Uchat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api.dart';
+import 'Apackages.dart';
 //import 'package:one/screens/filter.dart';
 
 class Apack extends StatefulWidget {
@@ -32,6 +34,8 @@ class _ApackState extends State<Apack> {
   String traveltype = "";
   String activity = "";
   String requirement = "";
+  String id = "";
+  late String _id;
 
   late String U_id;
   List _loaduserdata = [];
@@ -78,6 +82,7 @@ class _ApackState extends State<Apack> {
         traveltype = items['data']['traveltype'];
         activity = items['data']['activity'];
         requirement = items['data']['requirement'];
+        id = items['data']['_id'];
 
         // capacity = body['data'][0]['capacity'];
         // amount = body['data'][0]['amount'];
@@ -88,6 +93,62 @@ class _ApackState extends State<Apack> {
     //     _loaduserdata = [];
     //   });
     // }
+  }
+
+  _confirm(String id) async {
+    setState(() {
+      var _isLoading = true;
+    });
+
+    var data = {"_id": id};
+    print(data);
+    var res = await Api().getData('/api/userplan/approve-user-plan/' + id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print("body of res${body}");
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Anew()));
+      print(body['message']);
+    } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
+
+  _reject(String id) async {
+    setState(() {
+      var _isLoading = true;
+    });
+
+    var data = {"_id": id};
+    print(data);
+    var res = await Api().getData('/api/userplan/reject-user-plan/' + id);
+    var body = json.decode(res.body);
+
+    if (body['success'] == true) {
+      print("body of res${body}");
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Anew()));
+      print(body['message']);
+    } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
   }
 
   @override
@@ -416,7 +477,10 @@ class _ApackState extends State<Apack> {
                         child: ElevatedButton(
                             style:
                                 ElevatedButton.styleFrom(primary: Colors.cyan),
-                            onPressed: () {},
+                            onPressed: () async {
+                              _id = id;
+                              _confirm(_id);
+                            },
                             child: Text('Accept',
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.black))),
@@ -429,7 +493,10 @@ class _ApackState extends State<Apack> {
                         child: ElevatedButton(
                             style:
                                 ElevatedButton.styleFrom(primary: Colors.cyan),
-                            onPressed: () {},
+                            onPressed: () async {
+                              _id = id;
+                              _reject(_id);
+                            },
                             child: Text('Reject',
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.black))),

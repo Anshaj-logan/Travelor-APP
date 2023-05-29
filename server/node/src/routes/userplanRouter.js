@@ -54,6 +54,37 @@ userplanRouter.get('/view_single_user_plan/:login_id', (req, res) => {
         })
 })
 
+userplanRouter.get('/view-accepted-package/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        userplan.find({ login_id: id, status:1 })
+            .then(function (data) {
+                if (data == 0) {
+                    return res.status(401).json({
+                        success: false,
+                        error: true,
+                        message: "No Data Found!"
+                    })
+                }
+                else {
+                    return res.status(200).json({
+                        success: true,
+                        error: false,
+                        data: data
+                    })
+                }
+            })
+    } catch (error) {
+        return res.status(200).json({
+            success: true,
+            error: false,
+            message: "Something went wrong"
+        })
+    }
+
+
+})
+
 userplanRouter.get('/approve-user-plan/:id', async (req, res) => {
     const id = req.params.id
     try {
@@ -76,6 +107,37 @@ userplanRouter.get('/approve-user-plan/:id', async (req, res) => {
     }
 }
 )
+
+userplanRouter.get('/view-rejected-package/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        userplan.find({ login_id: id, status:2 })
+            .then(function (data) {
+                if (data == 0) {
+                    return res.status(401).json({
+                        success: false,
+                        error: true,
+                        message: "No Data Found!"
+                    })
+                }
+                else {
+                    return res.status(200).json({
+                        success: true,
+                        error: false,
+                        data: data
+                    })
+                }
+            })
+    } catch (error) {
+        return res.status(200).json({
+            success: true,
+            error: false,
+            message: "Something went wrong"
+        })
+    }
+
+
+})
 
 userplanRouter.get('/reject-user-plan/:id', async (req, res) => {
     const id = req.params.id
@@ -135,9 +197,9 @@ userplanRouter.get('/viewlocation', (req, res) => {
 
 userplanRouter.post('/addplan', async (req, res) => {
     try {
-        const { login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent } = req.body
+        const { login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent,package_name } = req.body
 
-        const packageDetails = await userplan.create({ login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent, status: 0 })
+        const packageDetails = await userplan.create({ login_id, fromlocation, wherelocation, startdate, enddate, persons, budget, traveltype, activity, requirement, agent,package_name, status: 0 })
         if (packageDetails) {
             res.status(201).json({ success: true, error: false, message: "package added", details: packageDetails });
         }
@@ -220,6 +282,11 @@ userplanRouter.get('/view-userplan-single-agent/:id', (req, res) => {
         {
             "$match": {
                 "agent": new ObjectId(id)
+            }
+        },
+        {
+            "$match": {
+                "status": '0'
             }
         },
         {
