@@ -15,17 +15,20 @@ const userplanRouter = express.Router()
 userplanRouter.post('/user-package-booking', async (req, res) => {
 
     try {
-        const date = new Date()
-        const { login_id,package_id, email,phone,mode } = req.body
-        const oldUser = await userPackageBooking.findOne({package_id: req.body.package_id, status:0,login_id:login_id})
-        if(oldUser) {
+       
+        const dateString = new Date()
+        const dates = new Date(dateString);
+        const date = dates.toISOString().split('T')[0];
+        const { login_id, package_id, email, phone, mode } = req.body
+        const oldUser = await userPackageBooking.findOne({ package_id: req.body.package_id, status: 0, login_id: login_id })
+        if (oldUser) {
             return res.status(401).json({
                 success: false,
                 error: true,
                 message: "Package already booked!"
             });
         }
-        const packagBooking = await userPackageBooking.create({ login_id,package_id, email,phone,mode,date,status:0 })
+        const packagBooking = await userPackageBooking.create({ login_id, package_id, email, phone, mode, date, status: 0 })
         if (packagBooking) {
             res.status(201).json({ success: true, error: false, message: "Package Booked", details: packagBooking });
         }
