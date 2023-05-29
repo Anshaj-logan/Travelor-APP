@@ -19,8 +19,6 @@ const userplanSchema = new schema({
 
     
     
-    
-    
 })
 
 const userplan = mongoose.model('userplan-tb',userplanSchema)
