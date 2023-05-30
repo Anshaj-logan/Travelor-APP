@@ -4,13 +4,71 @@ const userplan = require('../models/userplan')
 const userlocation = require('../models/location')
 const userPackageBooking = require('../models/userPackageBookingData')
 
-var ObjectId = require('mongodb').ObjectId;
+var objectId = require('mongodb').ObjectId;
 
 //const userselect = require('../models/userselect')
 
 
 
 const userplanRouter = express.Router()
+
+
+userplanRouter.get('/view_payment/:id', (req, res) => {
+    const id = req.params.id
+    userplan.aggregate([
+
+        {
+            '$lookup': {
+              'from': 'user-plan-booking-tbs', 
+              'localField': '_id', 
+              'foreignField': 'package_id', 
+              'as': 'plan'
+            }
+          }, {
+            '$lookup': {
+              'from': 'registration-tbs', 
+              'localField': 'login_id', 
+              'foreignField': 'login_id', 
+              'as': 'user'
+            }
+          },
+
+
+
+        {
+            "$unwind": "$plan"
+        },
+        {
+            "$unwind": "$user"
+        },
+        {
+            "$match":{
+                "agent":new objectId(id)
+            }
+        },
+        {
+            "$group": {
+                '_id': "$_id",
+                'package_name': { "$first": "$package_name" },
+                'name': { "$first": "$user.name" },
+                'mode': { "$first": "$plan.mode" },
+                'date': { "$first": "$plan.date" },
+            }
+        }
+    ])
+        .then((data) => {
+            res.status(200).json({
+                success: true,
+                error: false,
+                data: data
+            })
+        })
+        .catch(err => {
+            return res.status(401).json({
+                message: "something wrong"
+            })
+        })
+})
 
 userplanRouter.post('/user-package-booking', async (req, res) => {
 
@@ -87,6 +145,37 @@ userplanRouter.get('/view-accepted-package/:id', async (req, res) => {
     try {
         const id = req.params.id;
         userplan.find({ login_id: id, status: 1 })
+            .then(function (data) {
+                if (data == 0) {
+                    return res.status(401).json({
+                        success: false,
+                        error: true,
+                        message: "No Data Found!"
+                    })
+                }
+                else {
+                    return res.status(200).json({
+                        success: true,
+                        error: false,
+                        data: data
+                    })
+                }
+            })
+    } catch (error) {
+        return res.status(200).json({
+            success: true,
+            error: false,
+            message: "Something went wrong"
+        })
+    }
+
+
+})
+
+userplanRouter.get('/view-accepted-package-agent/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        userplan.find({ agent: id, status: 1 })
             .then(function (data) {
                 if (data == 0) {
                     return res.status(401).json({

@@ -5,8 +5,6 @@ import 'package:one/user/Ubooking.dart';
 import 'package:one/user/Uchat.dart';
 
 class Udetails extends StatefulWidget {
-
-
   @override
   State<Udetails> createState() => _UdetailsState();
 }
@@ -118,7 +116,8 @@ class _UdetailsState extends State<Udetails> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  "Details",textAlign: TextAlign.left,
+                  "Details",
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -128,7 +127,7 @@ class _UdetailsState extends State<Udetails> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(
-                 //controller: textController,
+                  //controller: textController,
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: 'Budget',
@@ -165,8 +164,10 @@ class _UdetailsState extends State<Udetails> {
                       primary: Color(0xff00ADB5),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15))),
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Ubooking())),
+                  onPressed: () {
+                    // Navigator.push(context,
+                    //   MaterialPageRoute(builder: (context) => Ubooking()));
+                  },
                   child: const Text('Book Now'),
                 ),
               ),

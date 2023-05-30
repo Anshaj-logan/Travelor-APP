@@ -1,18 +1,70 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:one/user/Udetails.dart';
 import 'package:one/user/Uothers.dart';
 import 'package:one/user/Usubmit.dart';
 
+import '../Payment/paymentSuccess.dart';
+import '../api.dart';
 import 'Uhome.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Ubooking extends StatefulWidget {
-  const Ubooking({Key? key}) : super(key: key);
+  String _id;
+  Ubooking(this._id);
 
   @override
   State<Ubooking> createState() => _UbookingState();
 }
 
 class _UbookingState extends State<Ubooking> {
+  late SharedPreferences localStrorage;
+  late String login_id;
+  late String _id;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController modeController = TextEditingController();
+  _boooking() async {
+    localStrorage = await SharedPreferences.getInstance();
+    login_id = (localStrorage.getString('loginId') ?? '');
+    print('login_id ${login_id}');
+    String U_id = "${widget._id}";
+    print('U-id ${U_id}');
+
+    var data = {
+      "login_id": login_id.replaceAll('"', ''),
+      "package_id": U_id,
+      "email": emailController.text,
+      "phone": phoneController.text,
+      "mode": selectedValue1,
+    };
+
+    print(data);
+
+    var res = await Api().authData(data, '/api/userplan/user-package-booking');
+    var body = json.decode(res.body);
+    print(res);
+
+    if (body['success'] == true) {
+      print(body);
+
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => PaymentSuccess()));
+    } else {
+      Fluttertoast.showToast(
+        msg: body['message'].toString(),
+        backgroundColor: Colors.grey,
+      );
+    }
+  }
+
   List items = [
     "Google pay",
     "Paytm",
@@ -47,10 +99,11 @@ class _UbookingState extends State<Ubooking> {
                 height: 10,
               ),
               TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter your email',
-              )),
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter your email',
+                  )),
               SizedBox(
                 height: 10,
               ),
@@ -63,10 +116,11 @@ class _UbookingState extends State<Ubooking> {
                 height: 10,
               ),
               TextField(
+                  controller: phoneController,
                   decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter your phone no.',
-              )),
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter your phone no.',
+                  )),
               SizedBox(
                 height: 10,
               ),
@@ -110,8 +164,9 @@ class _UbookingState extends State<Ubooking> {
                     primary: Color(0xff00ADB5),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15))),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Usubmit())),
+                onPressed: () {
+                  _boooking();
+                },
                 child: Text('OK'),
               ),
             ],

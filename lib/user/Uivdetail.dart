@@ -3,6 +3,7 @@ import 'package:one/user/Ubooking.dart';
 import 'package:one/user/Uchat.dart';
 import 'package:one/user/Uiv.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 class Uivdetail extends StatefulWidget {
   const Uivdetail({Key? key}) : super(key: key);
 
@@ -28,10 +29,12 @@ class _UivdetailState extends State<Uivdetail> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(backgroundColor:Color(0xff00ADB5),
+        appBar: AppBar(
+          backgroundColor: Color(0xff00ADB5),
           title: Text('Company1'),
           leading: IconButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Uiv())),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => Uiv())),
             icon: Icon(Icons.arrow_back),
           ),
         ),
@@ -45,7 +48,7 @@ class _UivdetailState extends State<Uivdetail> {
                   //scrollDirection: Axis.vertical,
                   onPageChanged: (index, reason) {
                     setState(
-                          () {
+                      () {
                         _currentIndex = index;
                       },
                     );
@@ -54,35 +57,34 @@ class _UivdetailState extends State<Uivdetail> {
                 items: imagesList
                     .map(
                       (item) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      margin: EdgeInsets.only(
-                        top: 10.0,
-                        bottom: 10.0,
-                      ),
-                      elevation: 6.0,
-                      shadowColor: Colors.redAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30.0),
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            Image.asset(
-                              item,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          margin: EdgeInsets.only(
+                            top: 10.0,
+                            bottom: 10.0,
+                          ),
+                          elevation: 6.0,
+                          shadowColor: Colors.redAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30.0),
                             ),
-
-                          ],
+                            child: Stack(
+                              children: <Widget>[
+                                Image.asset(
+                                  item,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                )
+                    )
                     .toList(),
               ),
               Row(
@@ -92,7 +94,8 @@ class _UivdetailState extends State<Uivdetail> {
                   return Container(
                     width: 10.0,
                     height: 10.0,
-                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: _currentIndex == index
@@ -108,46 +111,56 @@ class _UivdetailState extends State<Uivdetail> {
                   "Details",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(controller: textController,maxLines: null,
+                child: TextField(
+                  controller: textController,
+                  maxLines: null,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(controller: textController,maxLines: null,
+                child: TextField(
+                  controller: textController,
+                  maxLines: null,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(controller: textController,maxLines: null,
+                child: TextField(
+                  controller: textController,
+                  maxLines: null,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 100.0),
-                child: ElevatedButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>Ubooking())), child: const Text('Book Now'),),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>Ubooking()));
+                  },
+                  child: const Text('Book Now'),
+                ),
               ),
-
-
             ],
           ),
         ),
-        floatingActionButton: IconButton(onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Uchat())),
-          icon: Icon(Icons.chat, color: Colors.blue,),
+        floatingActionButton: IconButton(
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => const Uchat())),
+          icon: Icon(
+            Icons.chat,
+            color: Colors.blue,
+          ),
         ),
       ),
     );
