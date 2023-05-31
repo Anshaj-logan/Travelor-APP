@@ -5,44 +5,20 @@ const chat = require('../models/chat')
 const chatRouter = express.Router()
 
 
-chatRouter.post('/',async(req,res) => {
-    try{
-   
-        var loginDetails = {
-            username: req.body.username,
-            password: req.body.password,
-            role: 1
-        }
+chatRouter.post('/addchat', async (req, res) => {
+    try {
+        const { login_id,user_id,addchat} = req.body
 
-        var reg = {
-            login_id: result._id,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-           phonenumber: req.body.phonenumber,
-           email: req.body.email,
+        const packageDetails = await chat.create({ login_id,user_id,addchat, reply:null})
+        if (packageDetails) {
+            res.status(201).json({ success: true, error: false, message: "sent", details: packageDetails });
         }
-        var result = await loginData(loginDetails).save()
-        if(result) {
-            var chats = {
-                login_id: result._id,
-                message: req.body.message,
-                reply: req.body.reply,
-               
-            }
-            var chatDetails = await chat(chats).save()
-            if(chatDetails) {
-                return res.status(200).json({
-                    success: true,
-                    error: false,
-                    data: chatDetails,
-                    
-                })
-            }
-        }
-    }catch(err) {
-
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "something went wrong" });
+        console.log(error);
     }
 })
+
 
 
 module.exports = chatRouter

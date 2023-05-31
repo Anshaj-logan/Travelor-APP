@@ -72,7 +72,8 @@ console.log("user", passCheck);
                         role:oldUser.role,
                         status:oldUser.status, 
                         login_id: oldUser._id,
-                        name: registerDetails.name,
+                        // name: registerDetails.name,
+                        user_id:registerDetails._id,
                         message: "Login successful"
                     })
                 }

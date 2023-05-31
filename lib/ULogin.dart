@@ -59,8 +59,8 @@ class _ULoginState extends State<ULogin> {
             context, MaterialPageRoute(builder: (context) => Ahome()));
       } else if (user == role.replaceAll('"', '') &&
           storedValue == status.replaceAll('"', '')) {
-        Navigator.of(context).push(
-             MaterialPageRoute(builder: (context) => Uhome()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Uhome()));
       } else {
         Fluttertoast.showToast(
           msg: body['message'].toString(),
@@ -73,11 +73,14 @@ class _ULoginState extends State<ULogin> {
       localstorage.setString(
           'loginId', json.encode(body['login_id']).toString());
       localstorage.setString('agentId', json.encode(body['agt_id']).toString());
-
+      localstorage.setString(
+          'user_id', json.encode(body['user_id']).toString());
+      String user_id = (localstorage.getString('user_id') ?? '');
       String loginId = (localstorage.getString('login_id') ?? '');
       String agentId = (localstorage.getString('agt_id') ?? '');
       print(loginId);
       print(agentId);
+      print(user_id);
     } else {
       Fluttertoast.showToast(
         msg: body['message'].toString(),
@@ -223,7 +226,6 @@ class _ULoginState extends State<ULogin> {
                             ),
                           ),
                         ),
-
                         SizedBox(height: size.height * .07),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
