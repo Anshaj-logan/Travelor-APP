@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 
 const schema = mongoose.Schema
 const chatSchema = new schema({
-    login_id:{type:mongoose.Types.ObjectId,ref:"login-tb"},
-    user_id:{type:mongoose.Types.ObjectId,ref:"registration-tb"},
+    user_login_id:{type:mongoose.Types.ObjectId,ref:"registration-tb"},
+    agent_id:{type:mongoose.Types.ObjectId,ref:"travel_agent-tb"},
     addchat:{type:String},
     reply:{type:String},
     
