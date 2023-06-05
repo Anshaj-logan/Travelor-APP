@@ -5,12 +5,13 @@ import 'package:one/user/Utype.dart';
 import 'package:one/user/Upackages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api.dart';
+import 'Udetails.dart';
 
 class Ucity extends StatefulWidget {
   String index;
   String categname;
 
-  Ucity({required this.index,required this.categname});
+  Ucity({required this.index, required this.categname});
 
   @override
   State<Ucity> createState() => _UcityState();
@@ -46,8 +47,8 @@ class _UcityState extends State<Ucity> {
   String tripid = '';
   _fetchData() async {
     String id = widget.index;
-    String name=widget.categname;
-    var res = await Api().getData('/api/category/view-city/'+name);
+    String name = widget.categname;
+    var res = await Api().getData('/api/category/view-city/' + name);
 
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
@@ -101,8 +102,9 @@ class _UcityState extends State<Ucity> {
               return GestureDetector(
                 onTap: () {
                   tripid = loadeddata[index]['_id'];
+                  print('Package Id ${tripid}');
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Upackages(index: tripid,cityname: '',)));
+                      builder: (context) => Udetails(tripid)));
                 },
                 child: GridTile(
                   child: Image.asset(

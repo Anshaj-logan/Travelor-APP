@@ -120,7 +120,7 @@ class _UdateState extends State<Udate> {
                               print('from location ${fromloc}');
                               whereloc = "${widget.whereloc}";
                               print('where location ${whereloc}');
-                              startdate = _date2.text;
+                              startdate = _date1.text;
                               enddate = _date2.text;
 
                               Navigator.push(

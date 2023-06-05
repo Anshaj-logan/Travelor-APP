@@ -45,6 +45,64 @@ categoryRouter.get('/view_agent_category', (req, res) => {
 
 
 
+categoryRouter.get('/view-city-package/:cat/:city', (req, res) => {
+    const category = req.params.cat
+    const city = req.params.city
+    agentaddpackage.aggregate([
+
+        {
+            '$lookup': {
+                'from': 'category-tbs',
+                'localField': 'categoryname',
+                'foreignField': '_id',
+                'as': 'result'
+            }
+        },
+
+        {
+            "$match": {
+                "result.categoryname": category
+            }
+        },
+        {
+            "$match": {
+                "cityname": city
+            }
+        },
+
+        {
+            "$unwind": "$result"
+        },
+        // {
+        //     "$group": {
+        //         '_id': "$_id",
+        //         'package_name': { "$first": "$package_name" },
+        //         'categoryname': { "$first": "$result.categoryname" },
+        //         'categoryid': { "$first": "$result._id" },
+        //         'cityname': { "$first": "$cityname" },
+        //         'description': { "$first": "$description" },
+        //         'distance': { "$first": "$distance" },
+        //         'days': { "$first": "$days" },
+        //         'weather': { "$first": "$weather" },
+        //         'budget': { "$first": "$budget" },
+        //         'activity': { "$first": "$activity" },
+        //     }
+        // }
+    ])
+        .then((data) => {
+            res.status(200).json({
+                success: true,
+                error: false,
+                data: data
+            })
+        })
+        .catch(err => {
+            return res.status(401).json({
+                message: "something wrong"
+            })
+        })
+
+})
 categoryRouter.get('/view-city/:cat', (req, res) => {
     const category = req.params.cat
     agentaddpackage.aggregate([
