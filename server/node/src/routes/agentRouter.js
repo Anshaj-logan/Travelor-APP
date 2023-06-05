@@ -7,6 +7,7 @@ const multer = require('multer')
 
 const agentaddpackage = require('../models/agentaddpackage');
 const mongoose = require('mongoose');
+const agentPackagebooking = require('../models/agentPackageBooking');
 const objectId = mongoose.Types.ObjectId
 
 const agentRouter = express.Router()
@@ -21,6 +22,91 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
+
+
+agentRouter.post('/agent-package-booking', async (req, res) => {
+
+    try {
+       
+        const dateString = new Date()
+        const dates = new Date(dateString);
+        const date = dates.toISOString().split('T')[0];
+        const { login_id, package_id, email, phone, mode } = req.body
+        const oldUser = await agentPackagebooking.findOne({ package_id: req.body.package_id, status: 0, login_id: login_id })
+        if (oldUser) {
+            return res.status(401).json({
+                success: false,
+                error: true,
+                message: "Package already booked!"
+            });
+        }
+        const packagBooking = await agentPackagebooking.create({ login_id, package_id, email, phone, mode, date, status: 0 })
+        if (packagBooking) {
+            res.status(201).json({ success: true, error: false, message: "Package Booked", details: packagBooking });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "something went wrong" });
+        console.log(error);
+    }
+})
+
+// userplanRouter.get('/view_agent_payment/:id', (req, res) => {
+//     const id = req.params.id
+//     userplan.aggregate([
+
+//         {
+//             '$lookup': {
+//               'from': 'agent-package-booking-tbs', 
+//               'localField': '_id', 
+//               'foreignField': 'package_id', 
+//               'as': 'plan'
+//             }
+//           }, {
+//             '$lookup': {
+//               'from': 'registration-tbs', 
+//               'localField': 'login_id', 
+//               'foreignField': 'login_id', 
+//               'as': 'user'
+//             }
+//           },
+
+
+
+//         {
+//             "$unwind": "$plan"
+//         },
+//         {
+//             "$unwind": "$user"
+//         },
+//         {
+//             "$match":{
+//                 "agent":new objectId(id)
+//             }
+//         },
+//         {
+//             "$group": {
+//                 '_id': "$_id",
+//                 'package_name': { "$first": "$package_name" },
+//                 'name': { "$first": "$user.name" },
+//                 'mode': { "$first": "$plan.mode" },
+//                 'date': { "$first": "$plan.date" },
+//             }
+//         }
+//     ])
+//         .then((data) => {
+//             res.status(200).json({
+//                 success: true,
+//                 error: false,
+//                 data: data
+//             })
+//         })
+//         .catch(err => {
+//             return res.status(401).json({
+//                 message: "something wrong"
+//             })
+//         })
+// })
+
 
 
 agentRouter.post('/', async (req, res) => {
