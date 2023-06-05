@@ -74,6 +74,70 @@ chatRouter.get('/view-agent-chat/:id', async (req, res) => {
         console.log(error);
     }
 })
+chatRouter.get('/view-user-chat/:user_login_id', async (req, res) => {
+    try {
+        const id = req.params.user_login_id
+        const packageDetails = await chat.aggregate([
+            {
+              '$lookup': {
+                'from': 'registration-tbs', 
+                'localField': 'user_login_id', 
+                'foreignField': 'login_id', 
+                'as': 'user'
+              }
+            }, {
+              '$lookup': {
+                'from': 'travel_agent-tbs', 
+                'localField': 'agent_id', 
+                'foreignField': '_id', 
+                'as': 'agent'
+              }
+            },
+            {
+                "$unwind": "$user"
+            },
+            {
+                "$unwind": "$agent"
+            },
+            {
+                "$match":{
+                    "user_login_id":new objectId(id)
+                }
+            },
+            {
+                "$group": {
+                    '_id': "$_id",
+                    'addchat': { "$first": "$addchat" },
+                    'reply': { "$first": "$reply" },
+                    'name': { "$first": "$user.name" },
+                    'agentname': { "$first": "$agent.name" },
+                  
+                }
+            }
+          ])
+        if (packageDetails) {
+            res.status(201).json({ success: true, error: false, message: "sent", details: packageDetails });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "something went wrong" });
+        console.log(error);
+    }
+})
+
+chatRouter.post('/reply-chat', async (req, res) => {
+    try {
+        const chat_id = req.body.chat_id
+        const { reply} = req.body
+
+        const packageDetails = await chat.updateOne({ _id:chat_id},{$set:{reply}})
+        if (packageDetails.modifiedCount==1) {
+            res.status(201).json({ success: true, error: false, message: "Rply added" });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "something went wrong" });
+        console.log(error);
+    }
+})
 
 
 
