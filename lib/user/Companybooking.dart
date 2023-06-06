@@ -39,7 +39,7 @@ class _CompanyBookingState extends State<CompanyBooking> {
 
     print(data);
 
-    var res = await Api().authData(data, '/api/company/book_comapany ');
+    var res = await Api().authData(data, '/api/company/book_comapany');
     var body = json.decode(res.body);
     print(res);
 
