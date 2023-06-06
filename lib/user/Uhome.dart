@@ -9,6 +9,7 @@ import 'package:one/user/Utrip.dart';
 import 'package:one/user/Utype.dart';
 
 import 'CompanyCity.dart';
+import 'IView.dart';
 
 class Uhome extends StatefulWidget {
   const Uhome({Key? key}) : super(key: key);
@@ -66,6 +67,16 @@ class _UhomeState extends State<Uhome> {
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (BuildContext context) => Uprofile()));
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.travel_explore,
+                ),
+                title: const Text('My IVs'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => Iview()));
                 },
               ),
               ListTile(
