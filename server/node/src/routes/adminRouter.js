@@ -168,13 +168,30 @@ adminRouter.get('/delete-agent/:id',async(req,res) => {
 adminRouter.get('/view_package',(req,res)=>{
     res.render("view_package")
 })
-adminRouter.get('/view_payment', async(req,res)=>{
-try {
-    const data = 
+adminRouter.get('/view_payment',async(req,res)=>{
+    try {
+        const data = [
+            {
+              '$lookup': {
+                'from': 'userplan-tbs', 
+                'localField': 'package_id', 
+                'foreignField': '_id', 
+                'as': 'plan'
+              }
+            }, {
+              '$lookup': {
+                'from': 'registration-tbs', 
+                'localField': 'login_id', 
+                'foreignField': 'login_id', 
+                'as': 'user'
+              }
+            }
+          ]
+    } catch (error) {
+        
+    }
     res.render("view_payment")
-} catch (error) {
-    
-}
+
     
 })
 
