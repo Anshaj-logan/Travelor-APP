@@ -6,6 +6,31 @@ const adminRouter = express.Router()
 adminRouter.get('/',(req,res)=>{
     res.render("dashboard")
 })
+
+adminRouter.get('/logout',(req,res)=>{
+    res.render('login')
+  })
+
+  adminRouter.post("/admin-login", async (req, res) => {
+    const { username, password } = req.body;
+    console.log(username,password);
+    try {
+        const oldUser = await loginData.findOne({ username })
+        console.log(oldUser);
+        if (!oldUser) return res.redirect('/')
+        const isPasswordCorrect = await bcrypt.compare(password, oldUser.password)
+        if (!isPasswordCorrect) return res.redirect('/')
+        if (oldUser.role === '0') {
+                const admin = await loginData.findOne({ _id: oldUser._id })
+                if (admin) {
+                    return res.redirect('/admin')
+                }           
+        }       
+    } catch (error) {
+        return res.status(500).redirect('/')
+    }
+}) 
+
 adminRouter.get('/manage_user',(req,res)=>{
     loginData.aggregate(
         
