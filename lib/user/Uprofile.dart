@@ -106,8 +106,15 @@ class _UprofileState extends State<Uprofile> {
                             children: [
                               Row(
                                 children: [
-                                  Text('Name :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                  SizedBox(width: 20,),
+                                  Text(
+                                    'Name :',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
                                   Text(
                                     _loaduserdata[position]["name"],
                                     style: TextStyle(
@@ -122,8 +129,15 @@ class _UprofileState extends State<Uprofile> {
                               ),
                               Row(
                                 children: [
-                                  Text('Email :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                  SizedBox(width: 20,),
+                                  Text(
+                                    'Email :',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
                                   Text(
                                     _loaduserdata[position]["email"],
                                     style: TextStyle(
@@ -138,8 +152,15 @@ class _UprofileState extends State<Uprofile> {
                               ),
                               Row(
                                 children: [
-                                  Text('Phone number :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                  SizedBox(width: 20,),
+                                  Text(
+                                    'Phone number :',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
                                   Text(
                                     _loaduserdata[position]["phonenumber"],
                                     style: TextStyle(
@@ -152,22 +173,22 @@ class _UprofileState extends State<Uprofile> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: [
-                                  Text('Username :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                  SizedBox(width: 20,),
-                                  Text(
-                                    _loaduserdata[position]["username"],
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              )
+                              // Row(
+                              //   children: [
+                              //     Text('Username :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                              //     SizedBox(width: 20,),
+                              //     Text(
+                              //       _loaduserdata[position]["username"],
+                              //       style: TextStyle(
+                              //         fontSize: 20,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(
+                              //   height: 10,
+                              // )
                             ],
                           ),
                         ),

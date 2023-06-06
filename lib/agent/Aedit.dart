@@ -133,10 +133,10 @@ class _AeditState extends State<Aedit> {
                   const SizedBox(
                     height: 40,
                   ),
-                  buildTextField("username", username, usernameController),
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  // buildTextField("username", username, usernameController),
+                  // const SizedBox(
+                  //   height: 40,
+                  // ),
                   buildTextField("email", email, emailController),
                   const SizedBox(
                     height: 40,

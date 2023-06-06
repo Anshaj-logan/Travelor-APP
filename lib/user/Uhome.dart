@@ -8,6 +8,8 @@ import 'package:one/user/Usubmit.dart';
 import 'package:one/user/Utrip.dart';
 import 'package:one/user/Utype.dart';
 
+import 'CompanyCity.dart';
+
 class Uhome extends StatefulWidget {
   const Uhome({Key? key}) : super(key: key);
 
@@ -176,6 +178,40 @@ class _UhomeState extends State<Uhome> {
                   ),
                   SizedBox(
                     height: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CompanyCity()));
+                    },
+                    child: Container(
+                      child: Card(
+                        elevation: 10,
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'images/IV.jpg',
+                              height: 120,
+                              width: 250,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                'IV Plans',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   InkWell(
                     onTap: () {

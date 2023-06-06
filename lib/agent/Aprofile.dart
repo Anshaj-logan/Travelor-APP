@@ -197,29 +197,29 @@ class _AprofileState extends State<Aprofile> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Username :',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    _loaduserdata[position]["username"],
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              )
+                              // Row(
+                              //   children: [
+                              //     Text(
+                              //       'Username :',
+                              //       style: TextStyle(
+                              //           fontWeight: FontWeight.bold,
+                              //           fontSize: 20),
+                              //     ),
+                              //     SizedBox(
+                              //       width: 20,
+                              //     ),
+                              //     Text(
+                              //       _loaduserdata[position]["username"],
+                              //       style: TextStyle(
+                              //         fontSize: 20,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(
+                              //   height: 10,
+                              // )
                             ],
                           ),
                         ),

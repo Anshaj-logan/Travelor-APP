@@ -1,49 +1,40 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:one/user/Upackages.dart';
-import 'package:one/user/Ubooking.dart';
-import 'package:one/user/Uchat.dart';
+import 'package:flutter/material.dart';
 
 import '../api.dart';
-import 'agentpackbooking.dart';
+import 'Companybooking.dart';
 
-class Udetails extends StatefulWidget {
-  String U_id;
-  Udetails(this.U_id);
+class CompanyDetails extends StatefulWidget {
+  String companyid;
+  CompanyDetails(this.companyid);
+
   @override
-  State<Udetails> createState() => _UdetailsState();
+  State<CompanyDetails> createState() => _CompanyDetailsState();
 }
 
-class _UdetailsState extends State<Udetails> {
-  String packagename = "";
-  String budget = "";
+class _CompanyDetailsState extends State<CompanyDetails> {
+  String companyname = "";
+  String address = "";
   String cityname = "";
-  String distence = "";
-  String whether = "";
+  String discription = "";
+  String phone = "";
 
-  // String fromloc = "";
-  // String whereloc = "";
-  String days = "";
-
-  String traveltype = "";
-  String activity = "";
-  String requirement = "";
   String id = "";
   late String U_id;
   List _loaduserdata = [];
   TextEditingController textController = TextEditingController();
   String displayText = "";
   final List imagesList = [
-    "images/city1.jpg",
-    "images/city2.jpg",
-    "images/city3.jpg",
-    "images/city4.jpg",
-    "images/city5.jpg",
-    "images/city6.jpg"
+    "images/cmp1.webp",
+    'images/company1.jpg',
+    "images/cmp2.jpg",
+    'images/company2.jpg',
+    "images/cmp2.jpg",
+    'images/company3.webp',
   ];
-  final List titles = ["city1", "city2", "city3", "city4", "city5", "city6"];
+  // final List titles = ["city1", "city2", "city3", "city4", "city5", "city6"];
   int _currentIndex = 0;
 
   @override
@@ -55,10 +46,10 @@ class _UdetailsState extends State<Udetails> {
   }
 
   _fetchData() async {
-    U_id = widget.U_id;
+    U_id = widget.companyid;
 
     var res = await Api().getData(
-        '/api/agent/view_agent_SingleAddPackage/' + U_id.replaceAll('"', ''));
+        '/api/company/view_single_company/' + U_id.replaceAll('"', ''));
     print(res);
 
     if (res.statusCode == 200) {
@@ -66,15 +57,11 @@ class _UdetailsState extends State<Udetails> {
       print('data${items}');
 
       setState(() {
-        packagename = items['data'][0]['package_name'];
+        companyname = items['data'][0]['companyname'];
         cityname = items['data'][0]['cityname'];
-        whether = items['data'][0]['weather'];
-        budget = items['data'][0]['budget'];
-        days = items['data'][0]['days'];
-        distence = items['data'][0]['distance'];
-
-        traveltype = items['data'][0]['categoryname'];
-        activity = items['data'][0]['activity'];
+        address = items['data'][0]['address'];
+        discription = items['data'][0]['description'];
+        phone = items['data'][0]['phone'];
 
         id = items['data'][0]['_id'];
 
@@ -142,17 +129,17 @@ class _UdetailsState extends State<Udetails> {
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                 ),
-                                Center(
-                                  child: Text(
-                                    '${titles[_currentIndex]}',
-                                    style: TextStyle(
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.bold,
-                                      backgroundColor: Colors.black45,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
+                                // Center(
+                                //   child: Text(
+                                //     '${titles[_currentIndex]}',
+                                //     style: TextStyle(
+                                //       fontSize: 24.0,
+                                //       fontWeight: FontWeight.bold,
+                                //       backgroundColor: Colors.black45,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
@@ -195,7 +182,7 @@ class _UdetailsState extends State<Udetails> {
                 child: Row(
                   children: [
                     Text(
-                      'Package Name :',
+                      'Company Name :',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -205,7 +192,7 @@ class _UdetailsState extends State<Udetails> {
                     //],
                     //),
                     Text(
-                      packagename.toString(),
+                      companyname,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
@@ -238,36 +225,12 @@ class _UdetailsState extends State<Udetails> {
                   ],
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: Row(
-              //     children: [
-              //       Text(
-              //         'To Location :',
-              //         style:
-              //             TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              //       ),
-              //       SizedBox(
-              //         width: 10,
-              //       ),
-              //       //],
-              //       //),
-              //       Text(
-              //         whereloc,
-              //         style: TextStyle(
-              //           fontSize: 20,
-              //           fontWeight: FontWeight.normal,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                   children: [
                     Text(
-                      'Whether :',
+                      'Description :',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -277,7 +240,7 @@ class _UdetailsState extends State<Udetails> {
                     //],
                     //),
                     Text(
-                      '${whether} °C'.toString(),
+                      discription.toString(),
                       // whether.toString(),
                       style: TextStyle(
                         fontSize: 20,
@@ -292,7 +255,7 @@ class _UdetailsState extends State<Udetails> {
                 child: Row(
                   children: [
                     Text(
-                      'Distence :',
+                      'Contact Number :',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -302,7 +265,7 @@ class _UdetailsState extends State<Udetails> {
                     //],
                     //),
                     Text(
-                      distence.toString(),
+                      phone,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
@@ -316,7 +279,7 @@ class _UdetailsState extends State<Udetails> {
                 child: Row(
                   children: [
                     Text(
-                      'Days:',
+                      'Address',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -326,79 +289,7 @@ class _UdetailsState extends State<Udetails> {
                     //],
                     //),
                     Text(
-                      days.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Budget :',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    //],
-                    //),
-                    Text(
-                      budget,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Travel Type :',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    //],
-                    //),
-                    Text(
-                      traveltype,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Activity :',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    //],
-                    //),
-                    Text(
-                      activity.toString(),
+                      address.toString(),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
@@ -412,7 +303,7 @@ class _UdetailsState extends State<Udetails> {
               //   child: Row(
               //     children: [
               //       Text(
-              //         'Requirements :',
+              //         'Budget :',
               //         style:
               //             TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               //       ),
@@ -422,7 +313,7 @@ class _UdetailsState extends State<Udetails> {
               //       //],
               //       //),
               //       Text(
-              //         requirement,
+              //         budget,
               //         style: TextStyle(
               //           fontSize: 20,
               //           fontWeight: FontWeight.normal,
@@ -433,49 +324,50 @@ class _UdetailsState extends State<Udetails> {
               // ),
               // Padding(
               //   padding: const EdgeInsets.all(10.0),
-              //   child: TextField(
-              //     //controller: textController,
-              //     maxLines: null,
-              //     decoration: InputDecoration(
-              //       hintText: 'Budget',
-              //       border: OutlineInputBorder(),
-              //     ),
+              //   child: Row(
+              //     children: [
+              //       Text(
+              //         'Travel Type :',
+              //         style:
+              //             TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              //       ),
+              //       SizedBox(
+              //         width: 10,
+              //       ),
+              //       //],
+              //       //),
+              //       Text(
+              //         traveltype,
+              //         style: TextStyle(
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.normal,
+              //         ),
+              //       ),
+              //     ],
               //   ),
               // ),
               // Padding(
               //   padding: const EdgeInsets.all(10.0),
-              //   child: TextField(
-              //     //controller: textController,
-              //     maxLines: null,
-              //     decoration: InputDecoration(
-              //       hintText: 'Distance',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: TextField(
-              //     //controller: textController,
-              //     maxLines: null,
-              //     decoration: InputDecoration(
-              //       hintText: 'Weather details',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 100.0),
-              //   child: ElevatedButton(
-              //     style: ElevatedButton.styleFrom(
-              //         primary: Color(0xff00ADB5),
-              //         shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(15))),
-              //     onPressed: () {
-              //       // Navigator.push(context,
-              //       //   MaterialPageRoute(builder: (context) => Ubooking()));
-              //     },
-              //     child: const Text('Book Now'),
+              //   child: Row(
+              //     children: [
+              //       Text(
+              //         'Activity :',
+              //         style:
+              //             TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              //       ),
+              //       SizedBox(
+              //         width: 10,
+              //       ),
+              //       //],
+              //       //),
+              //       Text(
+              //         activity.toString(),
+              //         style: TextStyle(
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.normal,
+              //         ),
+              //       ),
+              //     ],
               //   ),
               // ),
             ],
@@ -485,10 +377,8 @@ class _UdetailsState extends State<Udetails> {
           onPressed: () async {
             U_id = id;
             print("U_id ${U_id}");
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AgentpackBooking(U_id)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CompanyBooking(U_id)));
           },
           label: const Text('Book Now'),
           icon: const Icon(Icons.thumb_up),

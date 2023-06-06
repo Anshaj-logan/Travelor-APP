@@ -53,7 +53,7 @@ class _AaddState extends State<Aadd> {
   @override
   void initState() {
     // TODO: iplement initState
-     super.initState();
+    super.initState();
     getcategories();
   }
 
@@ -212,50 +212,50 @@ class _AaddState extends State<Aadd> {
                     height: 10,
                   ),
 
-                  Container(
-                    /* decoration: BoxDecoration(
-    image: DecorationImage(
-      image: AssetImage('images/bg.jpg')
-    )
-  ),*/
-                    child: imageFile == null
-                        ? Container(
-                            child: Column(
-                              children: <Widget>[
-                                ElevatedButton(
-                                  onPressed: () {
-                                    //    _getFromGallery();
-                                    _showChoiceDialog(context);
-                                  },
-                                  child: Text("Upload Image"),
-                                ),
-                                Container(
-                                  height: 40.0,
-                                ),
-                              ],
-                            ),
-                          )
-                        : Row(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: Image.file(
-                                  imageFile!,
-                                  width: 100,
-                                  height: 100,
-                                  //  fit: BoxFit.cover,
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  //    _getFromGallery();
-                                  _showChoiceDialog(context);
-                                },
-                                child: Text("Upload Image"),
-                              ),
-                            ],
-                          ),
-                  ),
+                  //                 Container(
+                  //                   /* decoration: BoxDecoration(
+                  //   image: DecorationImage(
+                  //     image: AssetImage('images/bg.jpg')
+                  //   )
+                  // ),*/
+                  //                   child: imageFile == null
+                  //                       ? Container(
+                  //                           child: Column(
+                  //                             children: <Widget>[
+                  //                               ElevatedButton(
+                  //                                 onPressed: () {
+                  //                                   //    _getFromGallery();
+                  //                                   _showChoiceDialog(context);
+                  //                                 },
+                  //                                 child: Text("Upload Image"),
+                  //                               ),
+                  //                               Container(
+                  //                                 height: 40.0,
+                  //                               ),
+                  //                             ],
+                  //                           ),
+                  //                         )
+                  //                       : Row(
+                  //                           children: [
+                  //                             Container(
+                  //                               alignment: Alignment.centerLeft,
+                  //                               child: Image.file(
+                  //                                 imageFile!,
+                  //                                 width: 100,
+                  //                                 height: 100,
+                  //                                 //  fit: BoxFit.cover,
+                  //                               ),
+                  //                             ),
+                  //                             ElevatedButton(
+                  //                               onPressed: () {
+                  //                                 //    _getFromGallery();
+                  //                                 _showChoiceDialog(context);
+                  //                               },
+                  //                               child: Text("Upload Image"),
+                  //                             ),
+                  //                           ],
+                  //                         ),
+                  //                 ),
 
                   /*Container(
                     child: _image == null

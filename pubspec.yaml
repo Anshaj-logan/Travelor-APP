@@ -33,6 +33,7 @@ dependencies:
   path_provider:
   table_calendar:
   back_button_interceptor:
+  animated_text_kit:
   flutter:
     sdk: flutter
 

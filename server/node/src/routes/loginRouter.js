@@ -63,7 +63,8 @@ console.log("user", passCheck);
 
         else if(oldUser.role ==='2') {
             if(oldUser.status == "1") {
-                const registerDetails = registration.findOne({ login_id:oldUser._id})
+                const registerDetails = await registration.findOne({ login_id:oldUser._id})
+                console.log('registerDetails',registerDetails);
                 if(registerDetails) {
                     res.status(200).json({
                         success: true,
