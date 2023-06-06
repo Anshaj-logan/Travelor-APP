@@ -21,6 +21,7 @@ const paymentRouter = require("./src/routes/paymentRouter")
 const chatRouter = require("./src/routes/chatRouter")
 const agentRouter = require("./src/routes/agentRouter")
 const userplanRouter = require("./src/routes/userplanRouter")
+const companyRouter = require('./src/routes/companyRouter')
 
 
 
@@ -47,6 +48,7 @@ app.use('/api/payment',paymentRouter)
 app.use('/api/agent',agentRouter)
 app.use('/api/chat',chatRouter)
 app.use('/api/userplan',userplanRouter)
+app.use('/api/company',companyRouter)
 
 
 
