@@ -26,11 +26,12 @@ class _AnotiState extends State<Anoti> with SingleTickerProviderStateMixin {
   late SharedPreferences localStrorage;
   late String agent_id;
   List _loadacceptdata = [];
+  List _loadmessage = [];
 
   _payment() async {
     localStrorage = await SharedPreferences.getInstance();
     agent_id = (localStrorage.getString('agentId') ?? '');
-    print('login_id ${agent_id}');
+    print('id ${agent_id}');
 
     var res = await Api()
         .getData('/api/userplan/view_payment/' + agent_id.replaceAll('"', ''));
@@ -50,10 +51,34 @@ class _AnotiState extends State<Anoti> with SingleTickerProviderStateMixin {
     }
   }
 
+  _message() async {
+    localStrorage = await SharedPreferences.getInstance();
+    agent_id = (localStrorage.getString('agentId') ?? '');
+    print('agent ${agent_id}');
+
+    var res = await Api()
+        .getData('/api/chat/view-agent-chat/' + agent_id.replaceAll('"', ''));
+
+    if (res.statusCode == 200) {
+      var items = json.decode(res.body)['data'];
+      print('message data${items}');
+
+      setState(() {
+        _loadmessage = items;
+      });
+    } else {
+      setState(() {
+        _loadmessage = [];
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _message();
     _payment();
+
     tabController = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 

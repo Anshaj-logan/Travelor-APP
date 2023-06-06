@@ -26,6 +26,8 @@ class _ApackState extends State<Apack> {
   late SharedPreferences localStrorage;
   String packagename = "";
   String budget = "";
+  String agent = "";
+  String user = "";
   String fromloc = "";
   String whereloc = "";
   String startdate = "";
@@ -82,6 +84,8 @@ class _ApackState extends State<Apack> {
         traveltype = items['data']['traveltype'];
         activity = items['data']['activity'];
         requirement = items['data']['requirement'];
+        agent = items['data']['agent'];
+        user = items['data']['login_id'];
         id = items['data']['_id'];
 
         // capacity = body['data'][0]['capacity'];
@@ -509,8 +513,8 @@ class _ApackState extends State<Apack> {
           ),
         ),
         floatingActionButton: IconButton(
-          onPressed: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const Achat())),
+          onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => Achat(agent, user))),
           icon: Icon(
             Icons.chat,
             color: Colors.cyan,
