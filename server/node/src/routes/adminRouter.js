@@ -170,7 +170,7 @@ adminRouter.get('/view_package',(req,res)=>{
 })
 adminRouter.get('/view_payment',async(req,res)=>{
     try {
-        const data = [
+        const data = await userpackage.aggregate([
             {
               '$lookup': {
                 'from': 'userplan-tbs', 
@@ -185,12 +185,35 @@ adminRouter.get('/view_payment',async(req,res)=>{
                 'foreignField': 'login_id', 
                 'as': 'user'
               }
+            },
+            {
+                '$unwind':'$plan'
+            },
+            {
+                '$unwind':'$user'
+            },
+            {
+                '$group':{
+                    '_id':'$_id',
+                    'package_name':{'$first':"$plan.package_name"},
+                    'budget':{'$first':"$plan.budget"},
+                    'persons':{'$first':"$plan.persons"},
+                    'wherelocation':{'$first':"$plan.wherelocation"},
+                    'fromlocation':{'$first':"$plan.fromlocation"},
+                    'username':{'$first':"$user.name"},
+                    'email':{'$first':"$user.email"},
+                    'phonenumber':{'$first':"$user.phonenumber"},
+                    'mode':{'$first':"$mode"},
+                    'date':{'$first':"$date"},
+                }
             }
-          ]
+          ]) 
+        //   res.json(data)
+          res.render("view_payment",{data})
     } catch (error) {
         
     }
-    res.render("view_payment")
+   
 
     
 })

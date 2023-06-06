@@ -30,7 +30,7 @@
 
         <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
           <ul class="dropdown-menu settings-menu dropdown-menu-right">  
-            <li><a class="dropdown-item" href="page-login.html"><i class="fa fa-sign-out fa-lg"></i> Logout</a></li>
+            <li><a class="dropdown-item" href="/admin/logout"><i class="fa fa-sign-out fa-lg"></i> Logout</a></li>
           </ul>
         </li>
       </ul>
@@ -81,46 +81,33 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Payment ID</th>
-                  <th>login ID</th>
-                  <th>Payment type</th>
-                  <th>Payment date</th>
-                  <th>Amount</th>
-                  <th>Payment status</th>
+                  <th>Package Name</th>
+                  <th>Budget</th>
+                  <th>Date</th>
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Phonenumber</th>
+                  <th>Payment Mode</th>
 
                 </tr>
               </thead>
               <tbody>
+                <%for(i=0;i<data.length;i++){%>
                 <tr>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>A</td>
-                  <td>yy-mm-dd</td>
-                  <td>1000</td>
-                  <td>asd</td>
-                  
-                  
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>2</td>
-                  <td>J</td>
-                  <td>yy-mm-dd</td>
-                  <td>2000</td>
-                  <td>jh</td>
-                  
+                  <td><%=i+1%></td>
+                  <td><%=data[i].package_name%></td>
+                  <td><%=data[i].budget%></td>
+                  <td><%=data[i].date%></td>
+                  <td><%=data[i].username%></td>
+                  <td><%=data[i].email%></td>
+                  <td><%=data[i].phonenumber%></td>
+                  <td><%=data[i].mode%></td>
                  
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>3</td>
-                  <td>L</td>
-                  <td>yy-mm-dd</td>
-                  <td>3000</td>
-                  <td>hj</td>
                   
                   
                 </tr>
+                <%}%>
+               
               </tbody>
             </table>
           </div>
