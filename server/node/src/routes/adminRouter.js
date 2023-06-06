@@ -1,6 +1,7 @@
 const express = require('express')
 const loginData = require('../models/loginData')
 const registration = require('../models/registration')
+const userpackage = require('../models/userPackageBookingData')
 const adminRouter = express.Router()
 
 adminRouter.get('/',(req,res)=>{
@@ -167,8 +168,14 @@ adminRouter.get('/delete-agent/:id',async(req,res) => {
 adminRouter.get('/view_package',(req,res)=>{
     res.render("view_package")
 })
-adminRouter.get('/view_payment',(req,res)=>{
+adminRouter.get('/view_payment', async(req,res)=>{
+try {
+    const data = 
     res.render("view_payment")
+} catch (error) {
+    
+}
+    
 })
 
 module.exports = adminRouter
