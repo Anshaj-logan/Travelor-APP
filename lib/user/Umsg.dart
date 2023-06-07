@@ -28,6 +28,7 @@ class _UmsgState extends State<Umsg> with SingleTickerProviderStateMixin {
   List _loadrejectdata = [];
   List _loadacceptdata = [];
   late String U_id;
+
   @override
   void initState() {
     super.initState();

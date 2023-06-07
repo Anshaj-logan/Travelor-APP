@@ -25,8 +25,17 @@ class _AnotiState extends State<Anoti> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late SharedPreferences localStrorage;
   late String agent_id;
+
   List _loadacceptdata = [];
   List _loadmessage = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _payment();
+    _chat();
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+  }
 
   _payment() async {
     localStrorage = await SharedPreferences.getInstance();
@@ -51,7 +60,7 @@ class _AnotiState extends State<Anoti> with SingleTickerProviderStateMixin {
     }
   }
 
-  _message() async {
+  _chat() async {
     localStrorage = await SharedPreferences.getInstance();
     agent_id = (localStrorage.getString('agentId') ?? '');
     print('agent ${agent_id}');
@@ -71,15 +80,6 @@ class _AnotiState extends State<Anoti> with SingleTickerProviderStateMixin {
         _loadmessage = [];
       });
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _message();
-    _payment();
-
-    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
